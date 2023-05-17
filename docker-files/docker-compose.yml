@@ -1,0 +1,51 @@
+# Setup with network because of two different docker-compose files
+# https://stackoverflow.com/questions/38088279/communication-between-multiple-docker-compose-projects
+
+version: '3.7'
+
+services:
+  db:
+    image: postgres:13
+    container_name: worktools-db-container
+    ports:
+      - "25432:5432"
+    env_file: ./environment-files/db.env
+    volumes:
+      - worktools_data_volume:/var/lib/postgresql/data/
+      - ../../backups/:/var/backups
+    networks:
+      - api-network
+
+  web:
+    image: worktools-backend:dev
+    build:
+      context: ..
+      dockerfile: ./docker-files/Dockerfile
+    container_name: worktools-backend-container
+    env_file:
+      - ./environment-files/backend-default.env
+      - ./environment-files/db.env
+    command: >
+      bash -c "python manage.py migrate; \
+               python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ../:/home/appuser/code
+#      - static_volume:/home/appuser/code/staticfiles
+#      - media_volume:/home/appuser/code/mediafiles
+    ports:
+      - "18500:8000"
+    depends_on:
+      - db
+    networks:
+      - api-network
+
+volumes:
+  worktools_data_volume:
+  static_volume:
+  media_volume:
+
+# This is to connect frontend to backend
+networks:
+  api-network:
+    name: docker-files_api-network
+    driver: bridge
