@@ -8,16 +8,27 @@ class Project(CodeTable):
     pass
 
 
+class SubProject(CodeTable):
+    project = models.ForeignKey(
+        "projects.Project",
+        on_delete=models.CASCADE,
+        verbose_name=_("Project"),
+        help_text=_("Geef hier het project op waar dit project onder valt")
+    )
+
+
 class TicketType(CodeTable):
     pass
 
 
 class Ticket(BaseModel):
-    project = models.ForeignKey(
-        "projects.Project",
+    sub_project = models.ForeignKey(
+        "projects.SubProject",
         on_delete=models.PROTECT,
         verbose_name=_("Project"),
-        help_text=_("Geef hier het project voor het ticket op")
+        help_text=_("Geef hier het project op voor het ticket"),
+        null=True,
+        blank=True
     )
     title = models.CharField(
         max_length=120,

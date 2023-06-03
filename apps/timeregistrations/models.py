@@ -5,10 +5,19 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TimeRegistration(models.Model):
-    project = models.ForeignKey(
-        "projects.Project",
-        verbose_name=_("Project"),
+    sub_project = models.ForeignKey(
+        "projects.SubProject",
+        verbose_name=_("Subproject"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    ticket = models.ForeignKey(
+        "projects.Ticket",
+        verbose_name=_("Ticket"),
         on_delete=models.PROTECT,
+        null=True,
+        blank=True
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -30,6 +39,7 @@ class TimeRegistration(models.Model):
     description = models.TextField(
         verbose_name=_("Omschrijving"), null=True, blank=True
     )
+    # TODO: Remove when migration for ticket is completed
     external_reference = models.CharField(
         verbose_name=_("Externe referentie"),
         help_text=_("Geef hier een externe referentie op indien van toepassing"),

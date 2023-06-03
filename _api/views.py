@@ -1,14 +1,10 @@
-from time import sleep
-
 from django.contrib.auth import login, logout
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status, serializers
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
 from _api.serializers import ApiLoginSerializer
 
