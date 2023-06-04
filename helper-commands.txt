@@ -3,16 +3,3 @@ docker run -it --user 1000:1000 -v $(pwd):/home/appuser/code worktools-backend b
 
 # Install new package in pipenv
 docker run -it --user root -v $(pwd):/home/appuser/code worktools-backend bash
-
-
-Dump database
-=============
-1. Shell into container
-2. `cd /var/backups`
-3. `pg_dump -U worktools -Fc worktools > worktools_[DATE].backup`
-
-Restore database
-================
-1. Shell into container
-2. `cd /var/backups`
-3. `pg_restore -U worktools --dbname worktools "worktools_[DATE].backup"`

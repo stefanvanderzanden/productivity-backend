@@ -34,4 +34,3 @@ class ApiLoginSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs["user"] = user
         return attrs
-
